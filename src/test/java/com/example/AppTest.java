@@ -48,10 +48,10 @@ class AppTest {
             """;
 
     static String query = """
-                select
-                "g0"."id" "id",
-                "g0"."address" "address",
-                (
+            select
+            "g0"."id" "id",
+            "g0"."address" "address",
+            (
                 select json_arrayagg(json_object(
                     key 'id' value "g1"."id",
                     key 'todos' value ((
@@ -71,10 +71,10 @@ class AppTest {
                     where "g0"."id" = "house_id"
                     order by "id"
                 ) "g1"
-                ) "users"
+            ) "users"
             from "houses" "g0"
             order by "g0"."id"
-                """;
+            """;
 
     @Test
     public void brokenQueryTest() throws Exception {
@@ -98,16 +98,20 @@ class AppTest {
                 .build();
 
         Planner planner = Frameworks.getPlanner(config);
-        
+
         /**
-         * org.apache.calcite.sql.parser.SqlParseException: Query expression encountered in illegal context
-         *  at org.apache.calcite.sql.parser.impl.SqlParserImpl.convertException(SqlParserImpl.java:389)
-         *  at org.apache.calcite.sql.parser.impl.SqlParserImpl.normalizeException(SqlParserImpl.java:153)
-         *  at org.apache.calcite.sql.parser.SqlParser.handleException(SqlParser.java:145)
-         *  at org.apache.calcite.sql.parser.SqlParser.parseQuery(SqlParser.java:160)
-         *  at org.apache.calcite.sql.parser.SqlParser.parseStmt(SqlParser.java:185)
-         *  at org.apache.calcite.prepare.PlannerImpl.parse(PlannerImpl.java:214)
-         *  at org.apache.calcite.tools.Planner.parse(Planner.java:50)
+         * org.apache.calcite.sql.parser.SqlParseException: Query expression encountered
+         * in illegal context
+         * at
+         * org.apache.calcite.sql.parser.impl.SqlParserImpl.convertException(SqlParserImpl.java:389)
+         * at
+         * org.apache.calcite.sql.parser.impl.SqlParserImpl.normalizeException(SqlParserImpl.java:153)
+         * at
+         * org.apache.calcite.sql.parser.SqlParser.handleException(SqlParser.java:145)
+         * at org.apache.calcite.sql.parser.SqlParser.parseQuery(SqlParser.java:160)
+         * at org.apache.calcite.sql.parser.SqlParser.parseStmt(SqlParser.java:185)
+         * at org.apache.calcite.prepare.PlannerImpl.parse(PlannerImpl.java:214)
+         * at org.apache.calcite.tools.Planner.parse(Planner.java:50)
          */
         SqlNode sqlNode = planner.parse(query);
         SqlNode validated = planner.validate(sqlNode);
